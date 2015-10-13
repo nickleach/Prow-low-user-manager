@@ -1,66 +1,54 @@
 // BASE SETUP
-// ======================
+// ======================================
 
+// CALL THE PACKAGES --------------------
+var express    = require('express');    // call express
+var app        = express();         // define our app using express
+var bodyParser = require('body-parser');  // get body-parser
+var morgan     = require('morgan');     // used to see requests
+var mongoose   = require('mongoose');
+var config     = require('./config');
+var path     = require('path');
 
-//Call the packages --------------
-var express      = require('express'),
-    app          = express(),
-    bodyParser   = require('body-parser'),
-    morgan       = require('morgan'),
-    mongoose     = require('mongoose'),
-    config       = require('./config'),
-    path         = require('path');
-
-
-//APP config ================
-//===========================
-//use body parser so we can grab info from POST requests
-app.use(bodyParser.urlencoded({ extended: true}));
+// APP CONFIGURATION ==================
+// ====================================
+// use body parser so we can grab information from POST requests
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
 // configure our app to handle CORS requests
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, \
- Authorization');
- next();
-})
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+  next();
+});
 
-
-//log all requests to console
+// log all requests to the console
 app.use(morgan('dev'));
 
-
-//connect to database
+// connect to our database (hosted on modulus.io)
 mongoose.connect(config.database);
 
-
-//set static files location
-//used for requests that frontend will make
+// set static files location
+// used for requests that our frontend will make
 app.use(express.static(__dirname + '/public'));
 
+// ROUTES FOR OUR API =================
+// ====================================
 
-//ROUTES FOR API =========
-//========================
-
-//API Routes -------------
+// API ROUTES ------------------------
 var apiRoutes = require('./app/routes/api')(app, express);
 app.use('/api', apiRoutes);
 
-
-//Main Catchall Route ---------
-//Send Users to Frontend ------
-//Has to be registered after API routes
-app.get('*', function(req, res){
+// MAIN CATCHALL ROUTE ---------------
+// SEND USERS TO FRONTEND ------------
+// has to be registered after API ROUTES
+app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
 });
 
-
-
-//START THE SERVER
-// ============================
+// START THE SERVER
+// ====================================
 app.listen(config.port);
-console.log('Server running on port ' + config.port + '...');
-
+console.log('Magic happens on port ' + config.port);
