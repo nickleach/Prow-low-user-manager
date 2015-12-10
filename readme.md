@@ -1,4 +1,4 @@
-##Final MEAN APP
+##Admin User Manager App
 
-> This is my final exercise from the book MEAN Machine
-> Work in progress
+> Template for an admin app used for managing users.
+> Created with help from the book MEAN Machine
