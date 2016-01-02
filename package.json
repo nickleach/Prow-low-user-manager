@@ -1,10 +1,14 @@
 {
-  "name": "meanmachinefinal",
+  "name": "ProwlowUsers",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "0.12.x",
+    "npm": "2.7.x"
   },
   "author": "",
   "license": "ISC",
@@ -12,7 +16,9 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
+    "cors": "^2.7.1",
     "jsonwebtoken": "^5.4.0",
+    "moment": "^2.10.6",
     "mongoose": "^4.1.10",
     "morgan": "^1.6.1"
   }

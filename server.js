@@ -5,10 +5,12 @@
 var express    = require('express');    // call express
 var app        = express();         // define our app using express
 var bodyParser = require('body-parser');  // get body-parser
+var cors       = require('cors')
 var morgan     = require('morgan');     // used to see requests
 var mongoose   = require('mongoose');
 var config     = require('./config');
 var path     = require('path');
+var moment     = require('moment');
 
 // APP CONFIGURATION ==================
 // ====================================
@@ -24,6 +26,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use(cors());
 // log all requests to the console
 app.use(morgan('dev'));
 
@@ -38,8 +41,26 @@ app.use(express.static(__dirname + '/public'));
 // ====================================
 
 // API ROUTES ------------------------
-var apiRoutes = require('./app/routes/api')(app, express);
-app.use('/api', apiRoutes);
+var userRoutes = require('./app/routes/userRoutes')(app, express);
+app.use('/api', userRoutes);
+
+// Exception handling
+app.use(function(err, req, res, next) {
+  if(err.status !== 404) {
+    return next(err);
+  }
+
+  res.status(404);
+  res.send(err.message || 'Not found');
+});
+
+
+app.use(function(err, req, res, next) {
+
+  console.log('Internal server error')
+  res.status(500);
+  res.send(err.message || 'oops! something broke');
+});
 
 // MAIN CATCHALL ROUTE ---------------
 // SEND USERS TO FRONTEND ------------
