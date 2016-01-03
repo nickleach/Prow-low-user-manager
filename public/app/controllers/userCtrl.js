@@ -26,7 +26,7 @@ angular.module('userCtrl', ['userService'])
 			.success(function(data) {
 
 				// get all users to update the table
-				// you can also set up your api 
+				// you can also set up your api
 				// to return the list of users with the delete call
 				User.all()
 					.success(function(data) {
@@ -40,8 +40,8 @@ angular.module('userCtrl', ['userService'])
 })
 
 // controller applied to user creation page
-.controller('userCreateController', function(User) {
-	
+.controller('userCreateController', function(User, $log) {
+
 	var vm = this;
 
 	// variable to hide/show elements of the view
@@ -52,6 +52,7 @@ angular.module('userCtrl', ['userService'])
 	vm.saveUser = function() {
 		vm.processing = true;
 		vm.message = '';
+		$log.debug(vm.userData)
 
 		// use the create function in the userService
 		User.create(vm.userData)
@@ -59,9 +60,10 @@ angular.module('userCtrl', ['userService'])
 				vm.processing = false;
 				vm.userData = {};
 				vm.message = data.message;
+				$log.debug(data.message);
 			});
-			
-	};	
+
+	};
 
 })
 
@@ -86,7 +88,7 @@ angular.module('userCtrl', ['userService'])
 		vm.processing = true;
 		vm.message = '';
 
-		// call the userService function to update 
+		// call the userService function to update
 		User.update($routeParams.user_id, vm.userData)
 			.success(function(data) {
 				vm.processing = false;

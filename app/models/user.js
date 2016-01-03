@@ -8,13 +8,13 @@ var UserSchema   = new Schema({
 	username: { type: String, required: true, index: { unique: true }},
 	password: { type: String, required: true, select: false },
 	admin: { type: Boolean, required: true },
-	wholesale: { type: Boolean, required: true },
+	wholesale: Boolean,
 	prolowPrice: Number,
 	store: String,
 	address: String,
 	city: String,
 	state: String,
-	zip: String,
+	zip: Number,
 	phone: String,
 	email: String
 });
