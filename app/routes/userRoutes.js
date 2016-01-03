@@ -8,10 +8,10 @@ var superSecret = config.secret;
 
 module.exports = function(app, express) {
 
-	var apiRouter = express.Router();
+	var userRouter = express.Router();
 
 	// route to generate sample user
-	apiRouter.post('/sample', function(req, res) {
+	userRouter.post('/sample', function(req, res, next) {
 
 		// look for the user named chris
 		User.findOne({ 'username': 'chris' }, function(err, user) {
@@ -48,7 +48,7 @@ module.exports = function(app, express) {
 	});
 
 	// route to authenticate a user (POST http://localhost:8080/api/authenticate)
-	apiRouter.post('/authenticate', function(req, res) {
+	userRouter.post('/authenticate', function(req, res, next) {
 
 	  // find the user
 	  User.findOne({
@@ -59,19 +59,17 @@ module.exports = function(app, express) {
 
 	    // no user with that username was found
 	    if (!user) {
-	      res.json({
-	      	success: false,
-	      	message: 'Authentication failed. User not found.'
-	    	});
+	      var notFound = new Error("Could not find user");
+            notFound.status = 404;
+            return next(notFound);
 	    } else if (user) {
 
 	      // check if password matches
 	      var validPassword = user.comparePassword(req.body.password);
 	      if (!validPassword) {
-	        res.json({
-	        	success: false,
-	        	message: 'Authentication failed. Wrong password.'
-	      	});
+	        var notFound = new Error("Password and username doesn't match our records");
+            notFound.status = 404;
+            return next(notFound);
 	      } else {
 
 	        // if user is found and password is right
@@ -97,7 +95,7 @@ module.exports = function(app, express) {
 	});
 
 	// route middleware to verify a token
-	apiRouter.use(function(req, res, next) {
+	userRouter.use(function(req, res, next) {
 		// do logging
 		console.log('Somebody just came to our app!');
 
@@ -137,16 +135,16 @@ module.exports = function(app, express) {
 
 	// test route to make sure everything is working
 	// accessed at GET http://localhost:8080/api
-	apiRouter.get('/', function(req, res) {
+	userRouter.get('/', function(req, res) {
 		res.json({ message: 'hooray! welcome to our api!' });
 	});
 
 	// on routes that end in /users
 	// ----------------------------------------------------
-	apiRouter.route('/users')
+	userRouter.route('/users')
 
 		// create a user (accessed at POST http://localhost:8080/users)
-		.post(function(req, res) {
+		.post(function(req, res, next) {
 
 			var user = new User();		// create a new instance of the User model
 			user.name = req.body.name;  // set the users name (comes from the request)
@@ -163,14 +161,18 @@ module.exports = function(app, express) {
 			user.phone = req.body.phone;
 			user.email = req.body.email;
 
+			console.log("Creating new user: " + user);
 
 			user.save(function(err) {
 				if (err) {
 					// duplicate entry
-					if (err.code == 11000)
-						return res.json({ success: false, message: 'A user with that username already exists. '});
+					if (err.code == 11000){
+              var userExists = new Error("The user with that username already exists!");
+              userExists.status = 500;
+              return next(userExists);
+              }
 					else
-						return res.send(err);
+						return next(err);
 				}
 
 				// return a message
@@ -180,10 +182,12 @@ module.exports = function(app, express) {
 		})
 
 		// get all the users (accessed at GET http://localhost:8080/api/users)
-		.get(function(req, res) {
+		.get(function(req, res, next) {
 
 			User.find({}, function(err, users) {
-				if (err) res.send(err);
+				if (err) {
+					return next(err);
+				}
 
 				// return the users
 				res.json(users);
@@ -192,12 +196,20 @@ module.exports = function(app, express) {
 
 	// on routes that end in /users/:user_id
 	// ----------------------------------------------------
-	apiRouter.route('/users/:user_id')
+	userRouter.route('/users/:user_id')
 
 		// get the user with that id
-		.get(function(req, res) {
+		.get(function(req, res, next) {
 			User.findById(req.params.user_id, function(err, user) {
-				if (err) res.send(err);
+				if (err) {
+					next(err);
+				}
+
+				if(!user){
+            var notFound = new Error("User " + user + "not found");
+            notFound.status = 404;
+            return next(notFound);
+          }
 
 				// return that user
 				res.json(user);
@@ -205,10 +217,12 @@ module.exports = function(app, express) {
 		})
 
 		// update the user with this id
-		.put(function(req, res) {
+		.put(function(req, res, next) {
 			User.findById(req.params.user_id, function(err, user) {
 
-				if (err) res.send(err);
+				if(err) {
+            next(err);
+         }
 
 				// set the new user information if it exists in the request
 				if (req.body.name) user.name = req.body.name;
@@ -226,7 +240,9 @@ module.exports = function(app, express) {
 				if (req.body.email) user.email = req.body.email;
 				// save the user
 				user.save(function(err) {
-					if (err) res.send(err);
+					if(err) {
+              next(err)
+           }
 
 					// return a message
 					res.json({ message: 'User updated!' });
@@ -236,20 +252,28 @@ module.exports = function(app, express) {
 		})
 
 		// delete the user with this id
-		.delete(function(req, res) {
+		.delete(function(req, res, next) {
 			User.remove({
 				_id: req.params.user_id
 			}, function(err, user) {
-				if (err) res.send(err);
+				if(err) {
+            next(err);
+          }
+
+        if(!user){
+          var notFound = new Error("User " + user + "not found");
+          notFound.status = 404;
+          return next(notFound);
+        }
 
 				res.json({ message: 'Successfully deleted' });
 			});
 		});
 
 	// api endpoint to get user information
-	apiRouter.get('/me', function(req, res) {
+	userRouter.get('/me', function(req, res) {
 		res.send(req.decoded);
 	});
 
-	return apiRouter;
+	return userRouter;
 };
