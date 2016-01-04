@@ -131,6 +131,9 @@ module.exports = function(app, express) {
             emailFailed.status = 500;
             return next(emailFailed);
 	        }
+	        else{
+	        	response = "A link to reset your password has been sent to your email address.";
+	        }
 	        // return the information including token as JSON
 	        res.json({
 	          success: true,

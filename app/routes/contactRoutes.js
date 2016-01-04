@@ -17,9 +17,11 @@ module.exports = function(app, express){
 
         emailFailed.status = 500;
         return next(emailFailed);
+      }else{
+        response = "Your message has been sent! Someone will contact you shortly."
       }
       res.json({
-        message: "Email Sent!"
+        message: response
       })
 
     });
@@ -36,9 +38,11 @@ module.exports = function(app, express){
 
         emailFailed.status = 500;
         return next(emailFailed);
+      }else{
+        response = "Your request has been submitted, you will receive an email with login credentials upon approval."
       }
       res.json({
-        message: "Email Sent!"
+        message: "response"
       })
     });
 
