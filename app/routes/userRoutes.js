@@ -2,6 +2,7 @@ var bodyParser = require('body-parser'); 	// get body-parser
 var User       = require('../models/user');
 var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
+var sendMail = require('../helpers/emailHelper');
 
 // super secret for creating tokens
 var superSecret = config.secret;
@@ -47,7 +48,6 @@ module.exports = function(app, express) {
 
 	});
 
-	// route to authenticate a user (POST http://localhost:8080/api/authenticate)
 	userRouter.post('/authenticate', function(req, res, next) {
 
 	  // find the user
@@ -173,6 +173,15 @@ module.exports = function(app, express) {
               }
 					else
 						return next(err);
+				}
+
+
+				if (user.wholesale){
+					var email = "<p>Congratulations! You've been approved to purchase wholesale from ProlowPutting.com!</p> \
+					<p>Your credentials are: </p><p>Username: " + user.username + "</p><p>Password: " + req.body.password +"</p> \
+					You've been approved for a price of $" + user.prolowPrice + "per unit. Go to http://prolowputting.com/#/buy, click on the wholesale tab and start purchasing today!";
+
+					sendMail(user.email, "Welcome Prolow Wholesale Customer!", email, email, "noreply@prolowputting.com", "Pro Low Putting");
 				}
 
 				// return a message
