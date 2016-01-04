@@ -52,7 +52,7 @@ angular.module('userCtrl', ['userService'])
 	vm.saveUser = function() {
 		vm.processing = true;
 		vm.message = '';
-		$log.debug(vm.userData)
+		$log.debug("creating user", vm.userData)
 
 		// use the create function in the userService
 		User.create(vm.userData)
@@ -60,7 +60,7 @@ angular.module('userCtrl', ['userService'])
 				vm.processing = false;
 				vm.userData = {};
 				vm.message = data.message;
-				$log.debug(data.message);
+				$log.debug(data.message, data);
 			});
 
 	};

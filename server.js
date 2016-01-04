@@ -42,7 +42,9 @@ app.use(express.static(__dirname + '/public'));
 
 // API ROUTES ------------------------
 var userRoutes = require('./app/routes/userRoutes')(app, express);
+var contactRoutes = require('./app/routes/contactRoutes')(app, express);
 app.use('/api', userRoutes);
+app.use('/api', contactRoutes);
 
 // Exception handling
 app.use(function(err, req, res, next) {
