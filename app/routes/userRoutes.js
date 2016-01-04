@@ -55,7 +55,7 @@ module.exports = function(app, express) {
 	    username: req.body.username
 	  }).select('name username password').exec(function(err, user) {
 
-	    if (err) throw err;
+	    if (err) next(err);
 
 	    // no user with that username was found
 	    if (!user) {
@@ -150,8 +150,8 @@ module.exports = function(app, express) {
 			user.name = req.body.name;  // set the users name (comes from the request)
 			user.username = req.body.username;  // set the users username (comes from the request)
 			user.password = req.body.password;  // set the users password (comes from the request)
-			user.admin = req.body.admin;
-			user.wholesale = req.body.wholesale;
+			user.admin = req.body.admin ? req.body.admin : false;
+			user.wholesale = req.body.wholesale ? req.body.wholesale : false;
 			user.prolowPrice = req.body.prolowPrice;
 			user.store = req.body.store;
 			user.address = req.body.address;
@@ -201,15 +201,17 @@ module.exports = function(app, express) {
 		// get the user with that id
 		.get(function(req, res, next) {
 			User.findById(req.params.user_id, function(err, user) {
-				if (err) {
-					next(err);
-				}
+
 
 				if(!user){
-            var notFound = new Error("User " + user + "not found");
+            var notFound = new Error("User not found");
             notFound.status = 404;
             return next(notFound);
           }
+
+         if (err) {
+					next(err);
+				}
 
 				// return that user
 				res.json(user);
@@ -256,15 +258,17 @@ module.exports = function(app, express) {
 			User.remove({
 				_id: req.params.user_id
 			}, function(err, user) {
-				if(err) {
-            next(err);
-          }
 
         if(!user){
-          var notFound = new Error("User " + user + "not found");
+          var notFound = new Error("User not found");
           notFound.status = 404;
           return next(notFound);
         }
+
+        if(err) {
+            next(err);
+         }
+
 
 				res.json({ message: 'Successfully deleted' });
 			});
