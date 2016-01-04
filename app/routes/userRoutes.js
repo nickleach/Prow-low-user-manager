@@ -78,7 +78,7 @@ module.exports = function(app, express) {
 	        	username: user.username,
 	        	prolowPrice: user.prolowPrice
 	        }, superSecret, {
-	          expiresInMinutes: 1440 // expires in 24 hours
+	          expiresIn: 172800 // expires in 24 hours
 	        });
 
 	        // return the information including token as JSON
@@ -88,6 +88,54 @@ module.exports = function(app, express) {
 	          token: token
 	        });
 	      }
+
+	    }
+
+	  });
+	});
+
+	userRouter.post('/forgotPassword', function(req, res, next) {
+
+	  // find the user
+	  User.findOne({
+	    email: req.body.email
+	  }).select('name username password _id').exec(function(err, user) {
+
+	    if (err) next(err);
+
+	    // no user with that username was found
+	    if (!user) {
+	      var notFound = new Error("Could not find user with the email address provided");
+            notFound.status = 404;
+            return next(notFound);
+	    } else if (user) {
+
+	        // create a token
+	        var token = jwt.sign({
+	        	id: user._id
+	        }, superSecret, {
+	          expiresIn: 172800 // expires in 24 hours
+	        });
+
+	        var email = "<p>Your password reset request from ProLowPutting.com.</p> \
+	        <p>Please go to http://prolowputting.com/#/user/" + user._id + "/resetPassword/" + token + " to choose a new password</p>";
+
+	        var response = sendMail(req.body.email, "ProLowPutting Password Reset", email, email, "noreply@prolowputting.com", "ProLowPutting" );
+
+	        console.log("Password reset requested for user:" + user);
+
+	        if(response){
+	        	var emailFailed = new Error("Something went wrong with the email server!");
+	        	console.log("Password reset email failed " + response);
+
+            emailFailed.status = 500;
+            return next(emailFailed);
+	        }
+	        // return the information including token as JSON
+	        res.json({
+	          success: true,
+	          message: response
+	        });
 
 	    }
 
@@ -181,7 +229,17 @@ module.exports = function(app, express) {
 					<p>Your credentials are: </p><p>Username: " + user.username + "</p><p>Password: " + req.body.password +"</p> \
 					You've been approved for a price of $" + user.prolowPrice + "per unit. Go to http://prolowputting.com/#/buy, click on the wholesale tab and start purchasing today!";
 
-					sendMail(user.email, "Welcome Prolow Wholesale Customer!", email, email, "noreply@prolowputting.com", "Pro Low Putting");
+
+					var response = sendMail(user.email, "Welcome Prolow Wholesale Customer!", email, email, "noreply@prolowputting.com", "Pro Low Putting");
+
+					if(response){
+	        	var emailFailed = new Error("Something went wrong with the email server!");
+	        	console.log("Create wholesale user email failed " + response);
+            emailFailed.status = 500;
+            return next(emailFailed);
+	        }
+
+					console.log("Wholesale user created! " + user.username);
 				}
 
 				// return a message
@@ -190,7 +248,6 @@ module.exports = function(app, express) {
 
 		})
 
-		// get all the users (accessed at GET http://localhost:8080/api/users)
 		.get(function(req, res, next) {
 
 			User.find({}, function(err, users) {
