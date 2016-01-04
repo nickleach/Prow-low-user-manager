@@ -4,7 +4,6 @@ var https = require('https');
 
 function sendElasticEmail(to, subject, body_text, body_html, from, fromName) {
   // Make sure to add your username and api_key below.
-  console.log(to)
   var post_data = querystring.stringify({
     'username' : 'nick@prolowputting.com',
     'api_key': '20c6bdbe-7063-4236-bfef-e25b16c10a85',

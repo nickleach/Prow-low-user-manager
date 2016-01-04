@@ -53,7 +53,7 @@ module.exports = function(app, express) {
 	  // find the user
 	  User.findOne({
 	    username: req.body.username
-	  }).select('name username password').exec(function(err, user) {
+	  }).select('name username password prolowPrice').exec(function(err, user) {
 
 	    if (err) next(err);
 
@@ -71,12 +71,12 @@ module.exports = function(app, express) {
             notFound.status = 404;
             return next(notFound);
 	      } else {
-
 	        // if user is found and password is right
 	        // create a token
 	        var token = jwt.sign({
 	        	name: user.name,
-	        	username: user.username
+	        	username: user.username,
+	        	prolowPrice: user.prolowPrice
 	        }, superSecret, {
 	          expiresInMinutes: 1440 // expires in 24 hours
 	        });

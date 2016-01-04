@@ -7,13 +7,31 @@ module.exports = function(app, express){
   contactRouter.route('/contact')
 
     .post(function(req, res, next){
+      var email = req.body;
 
-      sendMail('nickleach22@gmail.com', 'WOOT!', 'My Text', 'My HTML', 'youremail@yourdomain.com', 'WOO');
-
+      console.log("Contact form: " + email);
+      var response = sendMail(email.to, email.subject, email.body, email.message, email.from, email.fromName);
+      if(!response){
+        response = "Email Sent!"
+      }
       res.json({
-        message: "Email sent yo!"
+        message: response
       })
 
+    });
+
+  contactRouter.route('/contact/wholesale')
+    .post(function(req, res, next){
+      var email = req.body;
+
+      console.log("Wholesale request form: " + email);
+      var response = sendMail(email.to, "Wholesale Customer Request", email.body, email.message, 'nick@prolowputting.com', email.fromName);
+      if(!response){
+          response = "Email Sent!"
+        }
+      res.json({
+        message: response
+      })
     });
 
 
