@@ -12,9 +12,8 @@ module.exports = function(app, express){
       console.log("Contact form: " + email);
       var response = sendMail(email.to, email.subject, email.body, email.message, email.from, email.fromName);
       if(response){
-        var emailFailed = new Error("Something went wrong with the email server!");
         console.log("Contact email failed " + response);
-
+        var emailFailed = new Error("Something went wrong with the email server!");
         emailFailed.status = 500;
         return next(emailFailed);
       }else{
