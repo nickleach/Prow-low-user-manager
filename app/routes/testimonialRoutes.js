@@ -32,6 +32,7 @@ module.exports = function(app, express){
       testimonial.image = req.body.image;
       testimonial.title = req.body.title;
       testimonial.approved = req.body.approved;
+      testimonial.customerCreated = req.body.customerCreated;
 
       console.log("Making new testimonial " + testimonial);
 
@@ -41,9 +42,10 @@ module.exports = function(app, express){
         }
         console.log("Testimonial created!");
 
-        if(!testimonial.approved){
-          var email = "<p>A customer has submitted a new testimonial! Click the link below to approve it!</p> " + testimonial._id;
-          console.log(email);
+        if(testimonial.customerCreated){
+          var email = "<p>A customer has submitted a new testimonial! Click the link below to approve it!</p> \
+          <p>http://localhost:8080/testimonials/" + testimonial._id;
+         sendMail("nickleach22@gmail.com", "New Testimonial", email, email, "noreply@prolowputting.com", "Prolow Putting");
         }
 
         res.json({
@@ -124,10 +126,11 @@ module.exports = function(app, express){
         if (req.body.author) testimonial.author = req.body.author;
         if (req.body.image) testimonial.image = req.body.image;
         if (req.body.title) testimonial.title = req.body.title;
-        if (req.body.approved) testimonial.approved = req.body.approved;
+
         if (req.body.date) {
           testimonial.date = moment(req.body.date).unix();
         }
+        testimonial.approved = req.body.approved;
         // save the testimonial
         testimonial.save(function(err) {
           if(err) {

@@ -1,0 +1,39 @@
+<div class="page-header">
+  <h1>
+    Testimonials
+    <a href="/testimonials/create" class="btn btn-default">
+      <span class="glyphicon glyphicon-plus"></span>
+      New Testimonial
+    </a>
+  </h1>
+
+</div>
+
+<div class="jumbotron text-center" ng-show="testimonial.processing">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <p>Loading Testimonials...</p>
+</div>
+
+<table class="table table-bordered table-striped" ng-show="testimonial.testimonials">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Author</th>
+      <th>Title</th>
+      <th>Approved</th>
+      <th class="col-sm-2"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="t in testimonial.testimonials">
+      <td>{{ t.date}}</td>
+      <td>{{ t.author }}</td>
+      <td>{{ t.title }}</td>
+      <td>{{ t.approved }}</td>
+      <td class="col-sm-2">
+        <a ng-href="/testimonials/{{ t._id }}" class="btn btn-danger">Edit</a>
+        <a href="#" ng-click="testimonial.deleteTestimonial(t._id)" class="btn btn-primary">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

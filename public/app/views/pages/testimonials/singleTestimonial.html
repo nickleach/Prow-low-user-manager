@@ -1,0 +1,78 @@
+<div class="page-header">
+  <h1 ng-if="testimonial.type == 'create'">Create Testimonial</h1>
+  <h1 ng-if="testimonial.type == 'edit'">Approve Testimonial</h1>
+</div>
+<div ng-if="testimonial.type == 'edit'">
+  <h4>{{testimonial.testimonialData.title}}</h4>
+  <h5>{{testimonial.testimonialData.author}}</h5>
+  <span>{{testimonial.testimonialData.date}}</span>
+  <p>{{testimonial.testimonialData.testimonial}}</p>
+</div>
+
+<form class="form-horizontal" ng-submit="testimonial.saveTestimonial()">
+<div ng-if="testimonial.type == 'create'">
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Date</label>
+    <div class="col-sm-4">
+      <input type="date" class="form-control" ng-model="testimonial.testimonialData.date">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">author</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" ng-model="testimonial.testimonialData.author">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Title</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" ng-model="testimonial.testimonialData.title">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Image Url</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" ng-model="testimonial.testimonialData.image">
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Testimonial</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control" ng-model="testimonial.testimonialData.testimonial">
+    </div>
+  </div>
+</div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="checkbox">
+        <label>
+          <input ng-model="testimonial.testimonialData.approved" type="checkbox">Approved
+        </label>
+      </div>
+    </div>
+  </div>
+  <input ng-if="testimonial.type == 'create'" type="hidden" ng-model="testimonial.testimonialData.customerCreated" ng-init="testimonial.testimonialData.customerCreated = false">
+
+  <div class="form-group">
+  <div class="col-sm-offset-2 col-sm-6">
+    <button type="submit" class="btn btn-success btn-lg btn-block" ng-if="testimonial.type == 'create'">Create testimonial</button>
+    <button type="submit" class="btn btn-success btn-lg btn-block" ng-if="testimonial.type == 'edit'">Update testimonial</button>
+  </div>
+  </div>
+
+</form>
+
+<div class="row show-hide-message" ng-show="testimonial.message">
+  <div class="col-sm-6 col-sm-offset-2">
+
+    <div class="alert alert-info">
+      {{ testimonial.message }}
+    </div>
+
+  </div>
+</div>

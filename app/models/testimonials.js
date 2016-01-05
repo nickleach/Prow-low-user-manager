@@ -7,7 +7,8 @@ var TestimonialSchema = new Schema({
   author: { type: String, required: true },
   image: String,
   title: { type: String, required: true },
-  approved: { type: Boolean, required: true }
+  approved: { type: Boolean, required: true },
+  customerCreated: Boolean
 });
 
 module.exports = mongoose.model('Testimonial', TestimonialSchema);
