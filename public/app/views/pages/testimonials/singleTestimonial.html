@@ -5,7 +5,7 @@
 <div ng-if="testimonial.type == 'edit'">
   <h4>{{testimonial.testimonialData.title}}</h4>
   <h5>{{testimonial.testimonialData.author}}</h5>
-  <span>{{testimonial.testimonialData.date}}</span>
+  <span>{{testimonial.testimonialData.date | dateTime}}</span>
   <p>{{testimonial.testimonialData.testimonial}}</p>
 </div>
 

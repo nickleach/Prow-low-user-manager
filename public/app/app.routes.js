@@ -51,6 +51,16 @@ angular.module('app.routes', ['ngRoute'])
 			templateUrl: 'app/views/pages/testimonials/singleTestimonial.html',
 			controller: 'testimonialEditCtrl',
 			controllerAs: 'testimonial'
+		})
+		.when('/pricing', {
+			templateUrl: 'app/views/pages/pricing/allPricing.html',
+			controller: 'pricingController',
+			controllerAs: 'pricing'
+		})
+		.when('/pricing/:pricing_id', {
+			templateUrl: 'app/views/pages/pricing/singlePricing.html',
+			controller: 'pricingEditCtrl',
+			controllerAs: 'pricing'
 		});
 
 	$locationProvider.html5Mode(true);

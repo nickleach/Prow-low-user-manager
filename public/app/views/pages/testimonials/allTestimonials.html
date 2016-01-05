@@ -26,7 +26,7 @@
   </thead>
   <tbody>
     <tr ng-repeat="t in testimonial.testimonials">
-      <td>{{ t.date}}</td>
+      <td>{{ t.date | dateTime }}</td>
       <td>{{ t.author }}</td>
       <td>{{ t.title }}</td>
       <td>{{ t.approved }}</td>
