@@ -1,8 +1,8 @@
 <div class="jumbotron text-center">
-	<h1>Welcome to the User Manager!</h1>
+	<h1>Welcome to the Prow Low Admin App!</h1>
 
 	<div ng-if="!main.loggedIn">
-		<p>Login to see manage your users.</p>
+		<p>Login to see manage your users, testimonials, and pricing.</p>
 		<a href="/login" class="btn btn-primary">Login</a>
 	</div>
 
@@ -10,4 +10,14 @@
 		<p>Manage your users.</p>
 		<a href="/users" class="btn btn-primary">View Users</a>
 	</div>
+  </br>
+  <div ng-if="main.loggedIn">
+    <p>View/Edit testimonials.</p>
+    <a href="/testimonials" class="btn btn-primary">View Testimonials</a>
+  </div>
+  </br>
+  <div ng-if="main.loggedIn">
+    <p>Manage your pricing.</p>
+    <a href="/pricing" class="btn btn-primary">View Pricing Tiers</a>
+  </div>
 </div>
