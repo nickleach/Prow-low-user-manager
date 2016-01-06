@@ -2,6 +2,7 @@ var bodyParser  = require('body-parser');  // get body-parser
 var Testimonial = require('../models/testimonials');
 var jwt         = require('jsonwebtoken');
 var config      = require('../../config');
+var verifyToken = require('../helpers/tokenHelper');
 var sendMail    = require('../helpers/emailHelper');
 var moment      = require('moment');
 
@@ -55,64 +56,31 @@ module.exports = function(app, express){
       })
     });
 
-    testimonialRouter.use(function(req, res, next) {
-      // do logging
-      console.log('Admin editing testimonials');
+  testimonialRouter.route('/testimonials/:testimonial_id')
+   // get the testimonial with that id
+      .get(function(req, res, next) {
+        Testimonial.findById(req.params.testimonial_id, function(err, testimonial) {
 
-      // check header or url parameters or post parameters for token
-      var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
-      // decode token
-      if (token) {
+          if(!testimonial){
+              var notFound = new Error("Testimonial not found");
+              notFound.status = 404;
+              return next(notFound);
+            }
 
-        // verifies secret and checks exp
-        jwt.verify(token, superSecret, function(err, decoded) {
-
-          if (err) {
-            res.status(403).send({
-              success: false,
-              message: 'Failed to authenticate token.'
-          });
-          } else {
-            // if everything is good, save to request for use in other routes
-            req.decoded = decoded;
-
-            next(); // make sure we go to the next routes and don't stop here
+           if (err) {
+            next(err);
           }
+
+          res.json(testimonial);
         });
+      });
 
-      } else {
-
-        // if there is no token
-        // return an HTTP response of 403 (access forbidden) and an error message
-        res.status(403).send({
-          success: false,
-          message: 'No token provided.'
-        });
-
-      }
+    testimonialRouter.use('/testimonials/:testimonial_id', function(req, res, next) {
+      verifyToken(req, res, next);
     });
       // ----------------------------------------------------
   testimonialRouter.route('/testimonials/:testimonial_id')
-
-    // get the testimonial with that id
-    .get(function(req, res, next) {
-      Testimonial.findById(req.params.testimonial_id, function(err, testimonial) {
-
-
-        if(!testimonial){
-            var notFound = new Error("Testimonial not found");
-            notFound.status = 404;
-            return next(notFound);
-          }
-
-         if (err) {
-          next(err);
-        }
-
-        res.json(testimonial);
-      });
-    })
 
     .put(function(req, res, next) {
       Testimonial.findById(req.params.testimonial_id, function(err, testimonial) {

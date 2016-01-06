@@ -3,6 +3,7 @@ var PricingTier = require('../models/pricingTiers');
 var jwt         = require('jsonwebtoken');
 var config      = require('../../config');
 var sendMail    = require('../helpers/emailHelper');
+var verifyToken = require('../helpers/tokenHelper');
 var moment      = require('moment');
 
 var superSecret = config.secret;
@@ -21,67 +22,9 @@ module.exports = function(app, express){
 
         res.json(pricingTiers)
       })
-    })
-
-    .post(function(req, res, next){
-      var pricingTier = new PricingTier();
-
-      pricingTier.price = req.body.price;
-      pricingTier.quantity = req.body.quantity;
-
-      console.log("Making new pricingTier " + pricingTier);
-
-      pricingTier.save(function(err){
-        if(err){
-          return next(err);
-        }
-        console.log("pricingTier created!");
-
-        res.json({
-          message: "Pricing tier created!",
-          created: pricingTier
-        });
-      })
     });
 
-    pricingTierRouter.use(function(req, res, next) {
-      // do logging
-      console.log('Admin editing pricingTiers');
 
-      // check header or url parameters or post parameters for token
-      var token = req.body.token || req.query.token || req.headers['x-access-token'];
-
-      // decode token
-      if (token) {
-
-        // verifies secret and checks exp
-        jwt.verify(token, superSecret, function(err, decoded) {
-
-          if (err) {
-            res.status(403).send({
-              success: false,
-              message: 'Failed to authenticate token.'
-          });
-          } else {
-            // if everything is good, save to request for use in other routes
-            req.decoded = decoded;
-
-            next(); // make sure we go to the next routes and don't stop here
-          }
-        });
-
-      } else {
-
-        // if there is no token
-        // return an HTTP response of 403 (access forbidden) and an error message
-        res.status(403).send({
-          success: false,
-          message: 'No token provided.'
-        });
-
-      }
-    });
-      // ----------------------------------------------------
   pricingTierRouter.route('/pricing/:pricingTier_id')
 
     // get the pricingTier with that id
@@ -101,7 +44,40 @@ module.exports = function(app, express){
 
         res.json(pricingTier);
       });
-    })
+    });
+
+  pricingTierRouter.use('/pricing', function(req, res, next) {
+    verifyToken(req, res, next);
+  });
+
+  pricingTierRouter.route('/pricing')
+      .post(function(req, res, next){
+      var pricingTier = new PricingTier();
+
+      pricingTier.price = req.body.price;
+      pricingTier.quantity = req.body.quantity;
+      pricingTier.itemId = req.body.itemId;
+
+      console.log("Making new pricingTier " + pricingTier);
+
+      pricingTier.save(function(err){
+        if(err){
+          return next(err);
+        }
+        console.log("pricingTier created!");
+
+        res.json({
+          message: "Pricing tier created!",
+          created: pricingTier
+        });
+      })
+    });
+
+  pricingTierRouter.use('/pricing/:pricingTier_id', function(req, res, next) {
+    verifyToken(req, res, next);
+  });
+      // ----------------------------------------------------
+  pricingTierRouter.route('/pricing/:pricingTier_id')
 
     .put(function(req, res, next) {
       PricingTier.findById(req.params.pricingTier_id, function(err, pricingTier) {
@@ -113,6 +89,7 @@ module.exports = function(app, express){
         // set the new pricingTier information if it exists in the request
         if (req.body.price) pricingTier.price = req.body.price;
         if (req.body.quantity) pricingTier.quantity = req.body.quantity;
+        if (req.body.itemId) pricingTier.itemId = req.body.itemId;
 
         // save the pricingTier
         pricingTier.save(function(err) {

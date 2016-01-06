@@ -45,11 +45,13 @@ var userRoutes = require('./app/routes/userRoutes')(app, express);
 var contactRoutes = require('./app/routes/contactRoutes')(app, express);
 var testimonialRoutes = require('./app/routes/testimonialRoutes')(app, express);
 var pricingRoutes = require('./app/routes/pricingRoutes')(app, express);
+var itemRoutes = require('./app/routes/itemRoutes')(app, express);
 
 app.use('/api', userRoutes);
 app.use('/api', contactRoutes);
 app.use('/api', testimonialRoutes);
 app.use('/api', pricingRoutes);
+app.use('/api', itemRoutes);
 // Exception handling
 app.use(function(err, req, res, next) {
   if(err.status !== 404) {
