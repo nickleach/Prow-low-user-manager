@@ -1,0 +1,37 @@
+<div class="page-header">
+  <h1>
+    Items
+    <a href="/items/create" class="btn btn-default">
+      <span class="glyphicon glyphicon-plus"></span>
+      New item
+    </a>
+  </h1>
+
+</div>
+
+<div class="jumbotron text-center" ng-show="item.processing">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <p>Loading Items...</p>
+</div>
+
+<table class="table table-bordered table-striped" ng-show="item.items">
+  <thead>
+    <tr>
+      <th>Item Name</th>
+      <th>Colors</th>
+      <th>Base Price</th>
+      <th class="col-sm-2"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="i in item.items">
+      <td>{{ i.title }}</td>
+      <td>{{ i.colors }}</td>
+      <td>{{ i.basePrice }}</td>
+      <td class="col-sm-2">
+        <a ng-href="/items/{{ i._id }}" class="btn btn-danger">Edit</a>
+        <a href="#" ng-click="item.deleteItem(i._id)" class="btn btn-primary">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

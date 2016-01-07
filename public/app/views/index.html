@@ -25,8 +25,9 @@
 		</div>
 		<ul class="nav navbar-nav">
 			<li><a href="/users"><span class="glyphicon glyphicon-user"></span> Users</a></li>
+			<li><a href="/items">Items</a></li>
+			<!-- <li><a href="/pricing">Pricing</a></li> -->
 			<li><a href="/testimonials">Testimonials</a></li>
-			<li><a href="/pricing">Pricing</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li ng-if="!main.loggedIn"><a href="/login">Login</a></li>
@@ -53,12 +54,14 @@
 	<script src="app/controllers/mainCtrl.js"></script>
 	<script src="app/controllers/userCtrl.js"></script>
 	<script src="app/controllers/testimonialCtrl.js"></script>
+	<script src="app/controllers/itemCtrl.js"></script>
 	<script src="app/controllers/pricingCtrl.js"></script>
 
 
 	<!-- services -->
 
 	<script src="app/services/testimonialService.js"></script>
+	<script src="app/services/itemService.js"></script>
 	<script src="app/services/authService.js"></script>
 	<script src="app/services/userService.js"></script>
 

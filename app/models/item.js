@@ -2,9 +2,13 @@ var mongoose    = require('mongoose'),
     Schema      = mongoose.Schema;
 
 var ItemSchema = new Schema({
-  price: { type: Number, required: true },
+  basePrice: { type: Number, required: true },
   title: { type: String, required: true },
-  colors: [String]
+  colors: [String],
+  pricingTiers: [{
+    price: Number,
+    quantity: Number
+  }]
 });
 
 module.exports = mongoose.model('Item', ItemSchema);

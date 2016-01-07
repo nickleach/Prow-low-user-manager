@@ -61,6 +61,21 @@ angular.module('app.routes', ['ngRoute'])
 			templateUrl: 'app/views/pages/pricing/singlePricing.html',
 			controller: 'pricingEditCtrl',
 			controllerAs: 'pricing'
+		})
+		.when('/items', {
+			templateUrl: 'app/views/pages/items/allItems.html',
+			controller: 'itemController',
+			controllerAs: 'item'
+		})
+		.when('/items/create', {
+			templateUrl: 'app/views/pages/items/singleItem.html',
+			controller: 'itemCreateCtrl',
+			controllerAs: 'item'
+		})
+		.when('/items/:item_id', {
+			templateUrl: 'app/views/pages/items/singleItem.html',
+			controller: 'itemEditCtrl',
+			controllerAs: 'item'
 		});
 
 	$locationProvider.html5Mode(true);

@@ -53,9 +53,10 @@ module.exports = function(app, express){
     .post(function(req, res, next){
       var item = new Item();
 
-      item.price = req.body.price;
+      item.basePrice = req.body.basePrice;
       item.colors = req.body.colors;
       item.title = req.body.title;
+      item.pricingTiers = req.body.pricingTiers;
 
       console.log("Making new item " + item);
 
@@ -86,9 +87,10 @@ module.exports = function(app, express){
          }
 
         // set the new item information if it exists in the request
-        if (req.body.price) item.price = req.body.price;
+        if (req.body.basePrice) item.basePrice = req.body.basePrice;
         if (req.body.colors) item.colors = req.body.colors;
         if (req.body.title) item.title = req.body.title;
+        if (req.body.pricingTiers) item.pricingTiers = req.body.pricingTiers;
 
         // save the item
         item.save(function(err) {

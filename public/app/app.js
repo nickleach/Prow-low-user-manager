@@ -7,7 +7,9 @@ angular.module('userApp', ['ngAnimate',
                            'testimonialCtrl',
                            'testimonialService',
                            'pricingCtrl',
-                           'pricingService'
+                           'pricingService',
+                           'itemCtrl',
+                           'itemService'
                            ])
 .filter('dateTime', function(){
   return function(date, input){
