@@ -41,6 +41,8 @@ angular.module('itemCtrl', ['itemService'])
       vm.processing = true;
       vm.message = '';
 
+      var tiers = [ vm.tier1, vm.tier2, vm.tier3 ];
+      vm.itemData.pricingTiers = tiers;
       Item.create(vm.itemData)
         .success(function(data){
           vm.processing = false;

@@ -57,6 +57,7 @@ module.exports = function(app, express){
       item.colors = req.body.colors;
       item.title = req.body.title;
       item.pricingTiers = req.body.pricingTiers;
+      item.description = req.body.description;
 
       console.log("Making new item " + item);
 
@@ -91,6 +92,7 @@ module.exports = function(app, express){
         if (req.body.colors) item.colors = req.body.colors;
         if (req.body.title) item.title = req.body.title;
         if (req.body.pricingTiers) item.pricingTiers = req.body.pricingTiers;
+        if (req.body.description) item.description = req.body.description;
 
         // save the item
         item.save(function(err) {

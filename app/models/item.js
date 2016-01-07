@@ -8,7 +8,8 @@ var ItemSchema = new Schema({
   pricingTiers: [{
     price: Number,
     quantity: Number
-  }]
+  }],
+  description: String
 });
 
 module.exports = mongoose.model('Item', ItemSchema);
