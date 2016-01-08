@@ -40,10 +40,15 @@ angular.module('userCtrl', ['userService'])
 })
 
 // controller applied to user creation page
-.controller('userCreateController', function(User, $log) {
+.controller('userCreateController', function(User, $log, Item) {
 
 	var vm = this;
-
+	  Item.all()
+      .success(function(data){
+        vm.processing = false;
+        console.log(data);
+        vm.items = data;
+      });
 	// variable to hide/show elements of the view
 	// differentiates between create or edit pages
 	vm.type = 'create';
@@ -52,6 +57,16 @@ angular.module('userCtrl', ['userService'])
 	vm.saveUser = function() {
 		vm.processing = true;
 		vm.message = '';
+
+		var userItems = vm.items.map(function(i){
+			var ims = {
+				itemId: i._id,
+				price: i.basePrice
+			};
+			return ims;
+		});
+
+		vm.userData.items = userItems;
 		$log.debug("creating user", vm.userData)
 
 		// use the create function in the userService
@@ -68,9 +83,15 @@ angular.module('userCtrl', ['userService'])
 })
 
 // controller applied to user edit page
-.controller('userEditController', function($routeParams, User) {
+.controller('userEditController', function($routeParams, User, Item) {
 
 	var vm = this;
+
+  Item.all()
+  	.success(function(data){
+    vm.processing = false;
+    vm.items = data;
+  });
 
 	// variable to hide/show elements of the view
 	// differentiates between create or edit pages
@@ -80,8 +101,17 @@ angular.module('userCtrl', ['userService'])
 	// $routeParams is the way we grab data from the URL
 	User.get($routeParams.user_id)
 		.success(function(data) {
+		var userItems = data.items.map(function(x){
+				var item = _.findWhere(vm.items, { _id: x.itemId });
+				x.title = item.title
+				return x;
+			})
+			data.items = userItems;
 			vm.userData = data;
+			console.log(vm.userData);
 		});
+
+
 
 	// function to save the user
 	vm.saveUser = function() {

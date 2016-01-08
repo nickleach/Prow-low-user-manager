@@ -22,12 +22,11 @@ module.exports = function(app, express) {
 			if (!user) {
 				var sampleUser = new User();
 
-				sampleUser.name = 'Chris';
-				sampleUser.username = 'chris';
-				sampleUser.password = 'supersecret';
+				sampleUser.name = 'nick';
+				sampleUser.username = 'nick';
+				sampleUser.password = 'nick';
 				sampleUser.wholesale = false;
 				sampleUser.admin = true;
-				sampleUser.prolowPrice = 0;
 				sampleUser.store = "Test Store";
 				sampleUser.address = "test address";
 				sampleUser.city = "dwood";
@@ -35,6 +34,12 @@ module.exports = function(app, express) {
 				sampleUser.zip = 30338;
 				sampleUser.phone = "59586859";
 				sampleUser.email = "ngk@gjka.com";
+				sampleUser.items = [
+						{
+							itemId : "568ee76a67b65a052b027002",
+							price : "0"
+						}
+					]
 
 				sampleUser.save();
 			} else {
@@ -54,7 +59,7 @@ module.exports = function(app, express) {
 	  // find the user
 	  User.findOne({
 	    username: req.body.username
-	  }).select('name username password prolowPrice').exec(function(err, user) {
+	  }).select('name username password items').exec(function(err, user) {
 
 	    if (err) next(err);
 
@@ -77,7 +82,7 @@ module.exports = function(app, express) {
 	        var token = jwt.sign({
 	        	name: user.name,
 	        	username: user.username,
-	        	prolowPrice: user.prolowPrice
+	        	items: user.items
 	        }, superSecret, {
 	          expiresIn: 172800 // expires in 24 hours
 	        });
@@ -170,7 +175,7 @@ module.exports = function(app, express) {
 			user.password = req.body.password;  // set the users password (comes from the request)
 			user.admin = req.body.admin ? req.body.admin : false;
 			user.wholesale = req.body.wholesale ? req.body.wholesale : false;
-			user.prolowPrice = req.body.prolowPrice;
+			user.items = req.body.items;
 			user.store = req.body.store;
 			user.address = req.body.address;
 			user.city = req.body.city;
@@ -276,6 +281,7 @@ module.exports = function(app, express) {
 				if (req.body.zip) user.zip = req.body.zip;
 				if (req.body.phone) user.phone = req.body.phone;
 				if (req.body.email) user.email = req.body.email;
+				if (req.body.items) user.items = req.body.items;
 				// save the user
 				user.save(function(err) {
 					if(err) {

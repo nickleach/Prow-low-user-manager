@@ -9,7 +9,12 @@ var UserSchema   = new Schema({
 	password: { type: String, required: true, select: false },
 	admin: { type: Boolean, required: true },
 	wholesale: Boolean,
-	prolowPrice: Number,
+	items: [
+			{
+				itemId: String,
+				price: Number
+			}
+		],
 	store: String,
 	address: String,
 	city: String,
