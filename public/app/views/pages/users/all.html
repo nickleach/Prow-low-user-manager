@@ -31,11 +31,11 @@
 		<tr ng-repeat="person in user.users">
 			<td>{{ person.name }}</td>
 			<td>{{ person.username }}</td>
-			<td>{{person.email}}</td>
-			<td>{{person.store}}</td>
-			<td>{{person.city}}</td>
-			<td>{{person.state}}</td>
-			<td>{{person.wholesale}}</td>
+			<td>{{ person.email }}</td>
+			<td>{{ person.store }}</td>
+			<td>{{ person.city }}</td>
+			<td>{{ person.state }}</td>
+			<td><span ng-show="{{person.wholesale}}" class="glyphicon glyphicon-ok"></span></td>
 			<td</td>
 			<td class="col-sm-2">
 				<a ng-href="/users/{{ person._id }}" class="btn btn-danger">Edit</a>

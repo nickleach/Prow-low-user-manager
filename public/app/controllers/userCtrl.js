@@ -40,7 +40,7 @@ angular.module('userCtrl', ['userService'])
 })
 
 // controller applied to user creation page
-.controller('userCreateController', function(User, $log, Item) {
+.controller('userCreateController', function(User, $log, Item, $location) {
 
 	var vm = this;
 	  Item.all()
@@ -83,7 +83,7 @@ angular.module('userCtrl', ['userService'])
 })
 
 // controller applied to user edit page
-.controller('userEditController', function($routeParams, User, Item) {
+.controller('userEditController', function($routeParams, User, Item, $location) {
 
 	var vm = this;
 
@@ -101,12 +101,24 @@ angular.module('userCtrl', ['userService'])
 	// $routeParams is the way we grab data from the URL
 	User.get($routeParams.user_id)
 		.success(function(data) {
-		var userItems = data.items.map(function(x){
-				var item = _.findWhere(vm.items, { _id: x.itemId });
-				x.title = item.title
-				return x;
-			})
-			data.items = userItems;
+			if(data.items.length > 0){
+				var userItems = data.items.map(function(x){
+					var item = _.findWhere(vm.items, { _id: x.itemId });
+					x.title = item.title
+					return x;
+				});
+				data.items = userItems;
+			}else{
+				var userItems = vm.items.map(function(x){
+					var item = {
+						itemId: x._id,
+						price: x.basePrice,
+						title: x.title
+					};
+					return item;
+				});
+				data.items = userItems;
+			}
 			vm.userData = data;
 			console.log(vm.userData);
 		});
@@ -117,7 +129,9 @@ angular.module('userCtrl', ['userService'])
 	vm.saveUser = function() {
 		vm.processing = true;
 		vm.message = '';
-
+		vm.userData.items.forEach(function(item){
+			delete item.title;
+		});
 		// call the userService function to update
 		User.update($routeParams.user_id, vm.userData)
 			.success(function(data) {
@@ -125,6 +139,7 @@ angular.module('userCtrl', ['userService'])
 
 				// clear the form
 				vm.userData = {};
+				$location.path('/users');
 
 				// bind the message from our API to vm.message
 				vm.message = data.message;

@@ -1,5 +1,6 @@
 var bodyParser  = require('body-parser');  // get body-parser
 var Item        = require('../models/item');
+var User        = require('../models/user');
 var jwt         = require('jsonwebtoken');
 var config      = require('../../config');
 var sendMail    = require('../helpers/emailHelper');
@@ -66,12 +67,31 @@ module.exports = function(app, express){
           return next(err);
         }
         console.log("item created!");
+        User.find({}, function(err, users) {
+          if (err) {
+            return next(err);
+          }
+          users.forEach(function(user){
+            var userItem = {
+              itemId : item._id,
+              price : item.basePrice
+            }
+            user.items.push(userItem);
+            user.save(function(err) {
+              if(err) {
+                  next(err);
+                  console.log(err);
+               }
+
+            });
+          });
+        });
 
         res.json({
           message: "Item created!",
           created: item
         });
-      })
+      });
     });
 
   itemRouter.use('/items/:item_id', function(req, res, next) {
@@ -122,6 +142,25 @@ module.exports = function(app, express){
         if(err) {
             next(err);
          }
+
+         User.find({}, function(err, users) {
+          if (err) {
+            return next(err);
+          }
+          users.forEach(function(user){
+            var withoutItem = user.items.filter(function(i){
+              return i.itemId !== req.params.item_id;
+            });
+            user.items = withoutItem;
+            user.save(function(err) {
+              if(err) {
+                  next(err);
+                  console.log(err);
+               }
+
+            });
+          });
+        });
 
 
         res.json({ message: 'Successfully deleted' });

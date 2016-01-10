@@ -51,7 +51,7 @@ angular.module('testimonialCtrl', ['testimonialService'])
     };
   })
 
-.controller('testimonialEditCtrl', function($routeParams, Testimonial) {
+.controller('testimonialEditCtrl', function($routeParams, Testimonial, $location) {
 
   var vm = this;
 
@@ -74,6 +74,8 @@ angular.module('testimonialCtrl', ['testimonialService'])
         vm.testimonialData = {};
 
         vm.message = data.message;
+
+        $location.path('/testimonials');
       });
   };
 

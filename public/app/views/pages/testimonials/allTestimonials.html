@@ -29,7 +29,7 @@
       <td>{{ t.date | dateTime }}</td>
       <td>{{ t.author }}</td>
       <td>{{ t.title }}</td>
-      <td>{{ t.approved }}</td>
+      <td><span ng-show="{{t.approved}}" class="glyphicon glyphicon-ok"></span></td>
       <td class="col-sm-2">
         <a ng-href="/testimonials/{{ t._id }}" class="btn btn-danger">Edit</a>
         <a href="#" ng-click="testimonial.deleteTestimonial(t._id)" class="btn btn-primary">Delete</a>

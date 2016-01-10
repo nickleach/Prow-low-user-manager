@@ -7,7 +7,8 @@ var sendMail    = require('../helpers/emailHelper');
 var moment      = require('moment');
 
 var superSecret = config.secret;
-
+var testimonialEmail = config.email.testimonial;
+var rootUrl = config.rootUrl + 'testimonials/';
 
 module.exports = function(app, express){
   var testimonialRouter = express.Router();
@@ -45,8 +46,8 @@ module.exports = function(app, express){
 
         if(testimonial.customerCreated){
           var email = "<p>A customer has submitted a new testimonial! Click the link below to approve it!</p> \
-          <p>http://localhost:8080/testimonials/" + testimonial._id;
-         sendMail("nickleach22@gmail.com", "New Testimonial", email, email, "noreply@prolowputting.com", "Prolow Putting");
+          <p>" + rootUrl + testimonial._id + '</p>';
+         sendMail(testimonialEmail, "New Testimonial", email, email, "noreply@prolowputting.com", "Pro Low Putting");
         }
 
         res.json({

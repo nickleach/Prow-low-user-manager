@@ -8,6 +8,7 @@ var verifyToken = require('../helpers/tokenHelper');
 // super secret for creating tokens
 var superSecret = config.secret;
 
+
 module.exports = function(app, express) {
 
 	var userRouter = express.Router();
