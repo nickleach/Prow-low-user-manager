@@ -125,7 +125,7 @@ module.exports = function(app, express) {
 	        });
 
 	        var email = "<p>Your password reset request from ProLowPutting.com.</p> \
-	        <p>Please go to http://prolowputting.com/#/user/" + user._id + "/resetPassword/" + token + " to choose a new password</p>";
+	        <p>Please go to " + config.appUrl + "/resetPassword/" + user._id + '/' + token + " to choose a new password</p>";
 
 	        var response = sendMail(req.body.email, "ProLowPutting Password Reset", email, email, "noreply@prolowputting.com", "ProLowPutting" );
 
@@ -274,7 +274,6 @@ module.exports = function(app, express) {
 				if (req.body.password) user.password = req.body.password;
 				if (req.body.admin) user.admin = req.body.admin;
 				if (req.body.wholesale) user.wholesale = req.body.wholesale;
-				if (req.body.prolowPrice) user.prolowPrice = req.body.prolowPrice;
 				if (req.body.store) user.store = req.body.store;
 				if (req.body.address) user.address = req.body.address;
 				if (req.body.city) user.city = req.body.city;
