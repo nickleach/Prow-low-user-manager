@@ -315,7 +315,10 @@ module.exports = function(app, express) {
 				res.json({ message: 'Successfully deleted' });
 			});
 		});
-
+	// route middleware to verify a token
+	userRouter.use('/me', function(req, res, next) {
+		verifyToken(req, res, next);
+	});
 	// api endpoint to get user information
 	userRouter.get('/me', function(req, res) {
 		res.send(req.decoded);
