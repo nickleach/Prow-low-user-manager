@@ -3,7 +3,7 @@ module.exports = {
   'database' : 'mongodb://nick:nick@ds037155.mongolab.com:37155/prolowtest',
   'secret': 'ilovescotchscotchyscotchscotch',
   'company' : 'Pro Low',
-  'rootUrl' : 'admin.prolowputting.com',
+  'rootUrl' : 'http://admin.prolowputting.com/',
   'appUrl' : 'http://prolowputting.com/',
   'email': {
     'testimonial' : 'nickleach22@gmail.com',
