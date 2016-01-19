@@ -28,7 +28,7 @@ module.exports = function(app, express){
     .post(function(req, res, next){
       var testimonial = new Testimonial();
 
-      testimonial.date = moment(req.body.date).unix();
+      testimonial.date = moment().unix();
       testimonial.testimonial = req.body.testimonial;
       testimonial.author = req.body.author;
       testimonial.image = req.body.image;
