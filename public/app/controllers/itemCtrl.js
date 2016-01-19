@@ -53,7 +53,7 @@ angular.module('itemCtrl', ['itemService'])
     };
   })
 
-.controller('itemEditCtrl', function($routeParams, Item, $location) {
+.controller('itemEditCtrl', function($routeParams, Item, $location, $log) {
 
   var vm = this;
 
@@ -62,6 +62,7 @@ angular.module('itemCtrl', ['itemService'])
   Item.get($routeParams.item_id)
     .success(function(data) {
       vm.itemData = data;
+      $log.debug("item", data)
     });
 
   vm.saveItem = function() {

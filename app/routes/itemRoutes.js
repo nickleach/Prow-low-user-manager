@@ -59,6 +59,7 @@ module.exports = function(app, express){
       item.title = req.body.title;
       item.pricingTiers = req.body.pricingTiers;
       item.description = req.body.description;
+      item.image = req.body.image;
 
       console.log("Making new item " + item);
 
@@ -113,6 +114,7 @@ module.exports = function(app, express){
         if (req.body.title) item.title = req.body.title;
         if (req.body.pricingTiers) item.pricingTiers = req.body.pricingTiers;
         if (req.body.description) item.description = req.body.description;
+        if (req.body.image) item.image = req.body.image;
 
         // save the item
         item.save(function(err) {

@@ -11,19 +11,6 @@
 
 <form class="form-horizontal" ng-submit="testimonial.saveTestimonial()">
 <div ng-if="testimonial.type == 'create'">
-  <div class="form-group">
-    <label class="col-sm-2 control-label">Date</label>
-    <div class="col-sm-4">
-      <input type="date" class="form-control" ng-model="testimonial.testimonialData.date">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label class="col-sm-2 control-label">author</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" ng-model="testimonial.testimonialData.author">
-    </div>
-  </div>
 
   <div class="form-group">
     <label class="col-sm-2 control-label">Title</label>
@@ -33,8 +20,15 @@
   </div>
 
   <div class="form-group">
+    <label class="col-sm-2 control-label">Author</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" ng-model="testimonial.testimonialData.author">
+    </div>
+  </div>
+
+  <div class="form-group">
     <label class="col-sm-2 control-label">Image Url</label>
-    <div class="col-sm-3">
+    <div class="col-sm-6">
       <input type="text" class="form-control" ng-model="testimonial.testimonialData.image">
     </div>
   </div>
@@ -43,7 +37,7 @@
   <div class="form-group">
     <label class="col-sm-2 control-label">Testimonial</label>
     <div class="col-sm-6">
-      <input type="text" class="form-control" ng-model="testimonial.testimonialData.testimonial">
+      <textarea class="form-control" ng-model="testimonial.testimonialData.testimonial"></textarea>
     </div>
   </div>
 </div>
