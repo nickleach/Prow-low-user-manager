@@ -20,7 +20,9 @@ angular.module('authService', [])
 			password: password
 		})
 			.success(function(data) {
-				AuthToken.setToken(data.token);
+				if(data.admin){
+					AuthToken.setToken(data.token);
+			}
        			return data;
 			});
 	};
@@ -34,10 +36,10 @@ angular.module('authService', [])
 	// check if a user is logged in
 	// checks if there is a local token
 	authFactory.isLoggedIn = function() {
-		if (AuthToken.getToken()) 
+		if (AuthToken.getToken())
 			return true;
 		else
-			return false;	
+			return false;
 	};
 
 	// get the logged in user
@@ -45,7 +47,7 @@ angular.module('authService', [])
 		if (AuthToken.getToken())
 			return $http.get('/api/me', { cache: true });
 		else
-			return $q.reject({ message: 'User has no token.' });		
+			return $q.reject({ message: 'User has no token.' });
 	};
 
 	authFactory.createSampleUser = function() {
@@ -98,9 +100,9 @@ angular.module('authService', [])
 		var token = AuthToken.getToken();
 
 		// if the token exists, add it to the header as x-access-token
-		if (token) 
+		if (token)
 			config.headers['x-access-token'] = token;
-		
+
 		return config;
 	};
 
@@ -118,5 +120,5 @@ angular.module('authService', [])
 	};
 
 	return interceptorFactory;
-	
+
 });

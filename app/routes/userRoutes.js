@@ -60,7 +60,7 @@ module.exports = function(app, express) {
 	  // find the user
 	  User.findOne({
 	    username: req.body.username
-	  }).select('name username password items').exec(function(err, user) {
+	  }).select('name username password items admin').exec(function(err, user) {
 
 	    if (err) next(err);
 
@@ -92,7 +92,8 @@ module.exports = function(app, express) {
 	        res.json({
 	          success: true,
 	          message: 'Enjoy your token!',
-	          token: token
+	          token: token,
+	          admin: user.admin
 	        });
 	      }
 

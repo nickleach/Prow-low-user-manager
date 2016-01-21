@@ -52,21 +52,21 @@
       <tr ng-repeat="i in item.itemData.pricingTiers">
         <!-- <td>{{ t.tier }}</td> -->
         <td><input type="number" ng-model="i.quantity" ></td>
-        <td><input type="number" ng-model="i.price" ></td>
+        <td><input type="number" step="0.01" ng-model="i.price" ></td>
       </tr>
     </tbody>
     <tbody ng-if="item.type == 'create'">
       <tr>
         <td><input type="number" ng-model="item.tier1.quantity" ></td>
-        <td><input type="number" ng-model="item.tier1.price" ></td>
+        <td><input type="number" step="0.01" ng-model="item.tier1.price" ></td>
       </tr>
       <tr>
         <td><input type="number" ng-model="item.tier2.quantity" ></td>
-        <td><input type="number" ng-model="item.tier2.price" ></td>
+        <td><input type="number" step="0.01"  ng-model="item.tier2.price" ></td>
       </tr>
       <tr>
-        <td><input type="number" ng-model="item.tier3.quantity" ></td>
-        <td><input type="number" ng-model="item.tier3.price" ></td>
+        <td><input type="number"  ng-model="item.tier3.quantity" ></td>
+        <td><input type="number" step="0.01"  ng-model="item.tier3.price" ></td>
       </tr>
     </tbody>
   </table>
