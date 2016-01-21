@@ -1,13 +1,13 @@
 module.exports = {
   'port' : process.env.PORT || 8080,
-  'database' : 'mongodb://nick:nick@ds037155.mongolab.com:37155/prolowtest',
+  'database' : 'mongodb://nick:nick@ds047065.mongolab.com:47065/prolow1',
   'secret': 'ilovescotchscotchyscotchscotch',
   'company' : 'Pro Low',
   'rootUrl' : 'http://admin.prolowputting.com/',
   'appUrl' : 'http://prolowputting.com/',
   'email': {
-    'testimonial' : 'nickleach22@gmail.com',
-    'wholesale' : 'nickleach22@gmail.com',
-    'contact' : 'nickleach22@gmail.com'
+    'testimonial' : 'aines.kevin@gmail.com',
+    'wholesale' : 'aines.kevin@gmail.com',
+    'contact' : 'aines.kevin@gmail.com'
   }
 };
