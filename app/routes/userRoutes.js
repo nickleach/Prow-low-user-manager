@@ -83,8 +83,7 @@ module.exports = function(app, express) {
 	        var token = jwt.sign({
 	        	name: user.name,
 	        	username: user.username,
-	        	items: user.items,
-	        	id: user._id
+	        	items: user.items
 	        }, superSecret, {
 	          expiresIn: 172800 // expires in 24 hours
 	        });
@@ -94,7 +93,8 @@ module.exports = function(app, express) {
 	          success: true,
 	          message: 'Enjoy your token!',
 	          token: token,
-	          admin: user.admin
+	          admin: user.admin,
+	          id : user._id
 	        });
 	      }
 
