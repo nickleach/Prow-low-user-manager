@@ -60,7 +60,7 @@ module.exports = function(app, express) {
 	  // find the user
 	  User.findOne({
 	    username: req.body.username
-	  }).select('name username password items admin').exec(function(err, user) {
+	  }).select('name username password items admin _id').exec(function(err, user) {
 
 	    if (err) next(err);
 
@@ -83,7 +83,8 @@ module.exports = function(app, express) {
 	        var token = jwt.sign({
 	        	name: user.name,
 	        	username: user.username,
-	        	items: user.items
+	        	items: user.items,
+	        	id: user._id
 	        }, superSecret, {
 	          expiresIn: 172800 // expires in 24 hours
 	        });
@@ -204,7 +205,7 @@ module.exports = function(app, express) {
 				if (user.wholesale){
 					var email = "<p>Congratulations! You've been approved to purchase wholesale from ProlowPutting.com!</p> \
 					<p>Your credentials are: </p><p>Username: " + user.username + "</p><p>Password: " + req.body.password +"</p> \
-					You've been approved for a price of $" + user.prolowPrice + "per unit. Go to http://prolowputting.com/#/buy, click on the wholesale tab and start purchasing today!";
+					You've been approved for a price of $" + user.items[0].price + "per unit. Go to http://prolowputting.com/#/buy, click on the wholesale tab and start purchasing today!";
 
 
 					var response = sendMail(user.email, "Welcome Prolow Wholesale Customer!", email, email, "noreply@prolowputting.com", "Pro Low Putting");
