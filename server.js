@@ -9,7 +9,7 @@ var cors       = require('cors')
 var morgan     = require('morgan');     // used to see requests
 var mongoose   = require('mongoose');
 var config     = require('./config');
-var path     = require('path');
+var path      = require('path');
 var moment     = require('moment');
 
 // APP CONFIGURATION ==================
@@ -46,12 +46,15 @@ var contactRoutes = require('./app/routes/contactRoutes')(app, express);
 var testimonialRoutes = require('./app/routes/testimonialRoutes')(app, express);
 var pricingRoutes = require('./app/routes/pricingRoutes')(app, express);
 var itemRoutes = require('./app/routes/itemRoutes')(app, express);
+var fssRoutes = require('./app/routes/fssRoutes')(app, express);
 
 app.use('/api', userRoutes);
 app.use('/api', contactRoutes);
 app.use('/api', testimonialRoutes);
 app.use('/api', pricingRoutes);
 app.use('/api', itemRoutes);
+app.use('/api', fssRoutes);
+
 // Exception handling
 app.use(function(err, req, res, next) {
   if(err.status !== 404) {
